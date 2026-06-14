@@ -19,8 +19,8 @@
         <form action="" id="shoeForm">
           <div class="form-basic">
             <div class="input-group">
-              <label>Тип обуви<span>*</span></label>
-              <select id="shoeType" required>
+              <label class="input-group-label">Тип обуви<span>*</span></label>
+              <select id="shoeType" class="form-select" required>
                 <option value="" disabled selected>
                   – Выберите категорию –
                 </option>
@@ -30,46 +30,71 @@
               </select>
             </div>
             <div class="input-group">
-              <label>Бренд <span>*</span></label>
+              <label class="input-group-label">Бренд <span>*</span></label>
               <input
                 type="text"
                 id="brand"
+                class="form-input"
                 placeholder="Например: Timberland, Nike"
                 required
               />
             </div>
             <div class="input-group">
-              <label>Размер<span>*</span></label>
+              <label class="input-group-label">Размер<span>*</span></label>
               <input
                 type="number"
                 step="0.5"
                 id="size"
+                class="form-input"
                 placeholder="36-46"
                 required
               />
             </div>
             <div class="input-group">
-              <label>Цвет <span>*</span></label>
-              <input type="text" id="color" placeholder="Чёрный" required />
+              <label class="input-group-label">Цвет <span>*</span></label>
+              <input
+                type="text"
+                id="color"
+                class="form-input"
+                placeholder="Чёрный"
+                required
+              />
             </div>
             <div class="input-group">
-              <label>Материал <span>*</span></label>
+              <label class="input-group-label">Материал <span>*</span></label>
               <input
                 type="text"
                 id="material"
+                class="form-input"
                 placeholder="Натуральная кожа"
                 required
               />
             </div>
             <div class="input-group">
-              <label>Цена<span>*</span></label>
-              <input type="number" id="price" placeholder="0" required />
+              <label class="input-group-label">Цена<span>*</span></label>
+              <input
+                type="number"
+                id="price"
+                class="form-input"
+                placeholder="0"
+                required
+              />
             </div>
             <div class="input-group">
-              <label>Детские <span>*</span></label>
-              <input type="checkbox" id="forchildren" required />
+              <label class="input-group-label">Детские <span>*</span></label>
+              <input
+                type="checkbox"
+                id="forKids"
+                class="input-checkbox"
+                required
+              />
             </div>
           </div>
+          <div
+            id="dynamicContainer"
+            class="dynamic-fields"
+            style="display: none"
+          ></div>
         </form>
       </div>
       <div class="wrapper"></div>
