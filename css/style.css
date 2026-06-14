@@ -94,3 +94,31 @@ input[type="number"]::-webkit-outer-spin-button {
   gap: 1.2rem;
   border: 1px solid #e2edf7;
 }
+
+.btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1.2rem;
+}
+
+.btn-save {
+  background: #3b82f6;
+  color: #e2e8f0;
+  border: none;
+  padding: 0.9rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: 0.2s;
+  width: 100%;
+  max-width: 260px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-save:hover {
+  background: #4510c2;
+  transform: translateY(-2px);
+}
