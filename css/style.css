@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "fira-sans-regular", sans-serif;
+}
+
+body {
+  background: #f1f5f9;
+  padding: 2rem 1.5rem;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.wrapper {
+  background: white;
+  border-radius: 28px;
+  padding: 1.8rem 2rem 2rem 2rem;
+  margin-bottom: 2.5rem;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
