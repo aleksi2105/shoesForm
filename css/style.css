@@ -152,6 +152,7 @@ input[type="number"]::-webkit-outer-spin-button {
   border-collapse: collapse;
   font-size: 0.85rem;
   min-width: 1200px;
+  overflow-x: auto;
 }
 
 .table-column {
@@ -197,4 +198,13 @@ td {
   padding: 2rem;
   color: #64748b;
   font-style: italic;
+}
+
+@media (max-width: 750px) {
+  body {
+    padding: 1rem;
+  }
+  .form-card {
+    padding: 1.2rem;
+  }
 }
