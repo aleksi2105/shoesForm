@@ -35,7 +35,7 @@
                 type="text"
                 id="brand"
                 class="form-input"
-                placeholder="Например: Timberland, Nike"
+                placeholder="Timberland, Nike, ..."
                 required
               />
             </div>
@@ -46,7 +46,7 @@
                 step="0.5"
                 id="size"
                 class="form-input"
-                placeholder="36-46"
+                placeholder="22-46"
                 required
               />
             </div>
@@ -100,7 +100,34 @@
           </div>
         </form>
       </div>
-      <div class="wrapper"></div>
+      <div class="wrapper">
+        <div class="table-header">
+          <h2 class="table-title">Каталог обуви</h2>
+          <div class="counter" id="itemsCounter">0 записей</div>
+        </div>
+        <table class="table-basic" id="shoesTable">
+          <thead>
+            <tr>
+              <th class="table-column">Тип</th>
+              <th class="table-column">Бренд</th>
+              <th class="table-column">Размер</th>
+              <th class="table-column">Цвет</th>
+              <th class="table-column">Материал</th>
+              <th class="table-column">Цена (₽)</th>
+              <th class="table-column">Дополнительно</th>
+              <th class="table-column">Дополнительно</th>
+              <th class="table-column" style="width: 70px">Действие</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <tr class="empty-row">
+              <td colspan="9">
+                Нет добавленных моделей. Заполните форму и сохраните.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </body>
 </html>
