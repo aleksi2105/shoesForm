@@ -133,3 +133,95 @@ function saveToLocalStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(serialized));
   } catch (e) { console.warn(e); }
 }
+
+function loadFromLocalStorage() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return [];
+  try {
+    const parsed = JSON.parse(raw);
+    const restored = [];
+    for (const item of parsed) {
+      let obj = null;
+      if (item.type === 'Boots') {
+        obj = Boots.fromPlainObject(item);
+      } else if (item.type === 'Shoes') {
+        obj = DressShoes.fromPlainObject(item);
+      } else if (item.type === 'Sneakers') {
+        obj = Sneakers.fromPlainObject(item);
+      } else {
+        continue;
+      }
+      if (obj) restored.push(obj);
+    }
+    return restored;
+  } catch (e) {
+    console.error("Ошибка парсинга localStorage", e);
+    return [];
+  }
+}
+
+function updateFullState(newInventory) {
+  footwearInventory = newInventory;
+  renderTable();
+  saveToLocalStorage();
+}
+
+function deleteShoeById(id) {
+  Footwear.removeFromStorageById(id, footwearInventory, (updatedArr) => {
+    footwearInventory = updatedArr;
+    renderTable();
+    saveToLocalStorage();
+  });
+}
+
+function renderDynamicFields() {
+  const selectedType = shoeTypeSelect.value;
+  if (!selectedType) {
+    dynamicContainer.style.display = 'none';
+    dynamicContainer.innerHTML = '';
+    return;
+  }
+  dynamicContainer.style.display = 'grid';
+  if (selectedType === 'boots') {
+    dynamicContainer.innerHTML = `
+                <div class="input-group">
+                    <label class="input-group-label">Высота голенища (см) <span>*</span></label>
+                    <input type="number" id="height" class="form-input" placeholder="например: 38" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-group-label">Вид утепления <span>*</span></label>
+                    <input type="text" id="insulation" class="form-input" placeholder="мех, шерсть, без утеплителя" required>
+                </div>
+            `;
+  } else if (selectedType === 'Shoes') {
+    dynamicContainer.innerHTML = `
+                <div class="input-group">
+                    <label class="input-group-label">Вид мыса <span>*</span></label>
+                    <input type="text" id="toeShape" class="form-input" placeholder="закрытый, круглый" required>
+                </div>
+                <div class="input-group">
+                    <label class="input-group-label">Высота каблука (см) <span>*</span></label>
+                    <input type="number" id="heelHeight" class="form-input" placeholder="например: 2" required>
+                </div>
+            `;
+  } else if (selectedType === 'sneakers') {
+    dynamicContainer.innerHTML = `
+                <div class="input-group">
+                    <label class="input-group-label">Непромокаемые <span>*</span></label>
+                    <select id="waterproof" class="form-select" required>
+                        <option value="" disabled selected>– выберите –</option>
+                        <option value="Да">Да, влагозащита</option>
+                        <option value="Нет">Нет, стандартные</option>
+                        <option value="Мембрана">Мембрана</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-group-label">Вес (граммы) <span>*</span></label>
+                    <input type="number" id="weight" class="form-input" placeholder="280-1000" required>
+                </div>
+            `;
+  }
+
+  const dynRequired = dynamicContainer.querySelectorAll('input, select');
+  dynRequired.forEach(field => field.setAttribute('required', 'required'));
+}
