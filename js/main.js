@@ -1,12 +1,13 @@
 'use strict'
 
 class Footwear {
-  constructor(brand, size, color, material, price, id = null) {
+  constructor(brand, size, color, material, price, forKids = false, id = null) {
     this.brand = brand;
     this.size = size;
     this.color = color;
     this.material = material;
     this.price = price;
+    this.forKids = forKids;
     this.id = id ?? crypto.randomUUID?.() ?? Date.now() + '-' + Math.random().toString(36);
   }
 
@@ -16,6 +17,10 @@ class Footwear {
 
   getExtraProps() {
     return { prop1: "—", prop2: "—" };
+  }
+
+  getChildrenStatus() {
+    return this.forKids ? "Да" : "Нет";
   }
 
   static removeFromStorageById(id, inventoryArray, saveCallback) {
@@ -31,8 +36,8 @@ class Footwear {
 }
 
 class Boots extends Footwear {
-  constructor(brand, size, color, material, price, height, insulation, id = null) {
-    super(brand, size, color, material, price, id);
+  constructor(brand, size, color, material, price, height, insulation, forKids = false, id = null) {
+    super(brand, size, color, material, price, forKids, id);
     this.height = height;
     this.insulation = insulation;
   }
@@ -46,13 +51,13 @@ class Boots extends Footwear {
   }
 
   static fromPlainObject(obj) {
-    return new Boots(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.height, obj.insulation, obj.id);
+    return new Boots(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.height, obj.insulation, obj.forKids || false, obj.id);
   }
 }
 
 class Shoes extends Footwear {
-  constructor(brand, size, color, material, price, toeShape, heelHeight, id = null) {
-    super(brand, size, color, material, price, id);
+  constructor(brand, size, color, material, price, toeShape, heelHeight, forKids = false, id = null) {
+    super(brand, size, color, material, price, forKids, id);
     this.toeShape = toeShape;
     this.heelHeight = heelHeight;
   }
@@ -66,13 +71,13 @@ class Shoes extends Footwear {
   }
 
   static fromPlainObject(obj) {
-    return new Shoes(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.toeShape, obj.heelHeight, obj.id);
+    return new Shoes(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.toeShape, obj.heelHeight, forKids || false, obj.id);
   }
 }
 
 class Sneakers extends Footwear {
-  constructor(brand, size, color, material, price, waterproof, weight, id = null) {
-    super(brand, size, color, material, price, id);
+  constructor(brand, size, color, material, price, waterproof, weight, forKids = false, id = null) {
+    super(brand, size, color, material, price, forKids, id);
     this.waterproof = waterproof;
     this.weight = weight;
   }
@@ -86,7 +91,7 @@ class Sneakers extends Footwear {
   }
 
   static fromPlainObject(obj) {
-    return new Sneakers(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.waterproof, obj.weight, obj.id);
+    return new Sneakers(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.waterproof, obj.weight, forKids || false, obj.id);
   }
 }
 
@@ -103,6 +108,7 @@ const sizeInput = document.getElementById('size');
 const colorInput = document.getElementById('color');
 const materialInput = document.getElementById('material');
 const priceInput = document.getElementById('price');
+const forKidsCheckbox = document.getElementById('forKids');
 
 const STORAGE_KEY = 'footwear_inventory_app';
 
@@ -117,6 +123,7 @@ function saveToLocalStorage() {
         color: item.color,
         material: item.material,
         price: item.price,
+        forKids: item.forKids || false,
       };
       if (item instanceof Boots) {
         base.height = item.height;
@@ -283,16 +290,17 @@ function onFormSubmit(event) {
   const color = colorInput.value.trim();
   const material = materialInput.value.trim();
   const price = parseFloat(priceInput.value);
+  const forKids = forKidsCheckbox?.checked || false;
 
   let newShoe = null;
   try {
     const dynamic = getDynamicData(selectedType);
     if (selectedType === 'boots') {
-      newShoe = new Boots(brand, size, color, material, price, dynamic.height, dynamic.insulation);
+      newShoe = new Boots(brand, size, color, material, price, dynamic.height, dynamic.insulation, forKids);
     } else if (selectedType === 'shoes') {
-      newShoe = new Shoes(brand, size, color, material, price, dynamic.toeShape, dynamic.heelHeight);
+      newShoe = new Shoes(brand, size, color, material, price, dynamic.toeShape, dynamic.heelHeight, forKids);
     } else if (selectedType === 'sneakers') {
-      newShoe = new Sneakers(brand, size, color, material, price, dynamic.waterproof, dynamic.weight);
+      newShoe = new Sneakers(brand, size, color, material, price, dynamic.waterproof, dynamic.weight, forKids);
     }
   } catch (err) {
     alert(err.message);
@@ -306,13 +314,14 @@ function onFormSubmit(event) {
   shoeTypeSelect.value = "";
   dynamicContainer.style.display = 'none';
   dynamicContainer.innerHTML = '';
+  forKidsCheckbox.checked = false;
   brandInput.focus();
 }
 
 function renderTable() {
   if (!tableBody) return;
   if (footwearInventory.length === 0) {
-    tableBody.innerHTML = `<tr class="empty-row"><td colspan="9">Нет добавленных моделей. Заполните форму и сохраните.</td></tr>`;
+    tableBody.innerHTML = `<tr class="empty-row"><td colspan="10">Нет добавленных моделей. Заполните форму и сохраните.</td></tr>`;
     itemsCounter.innerText = `0 записей`;
     return;
   }
@@ -326,11 +335,12 @@ function renderTable() {
                         <td>${item.size}</td>
                         <td>${escapeHtml(item.color)}</td>
                         <td>${escapeHtml(item.material)}</td>
-                        <td>${item.price.toLocaleString()} ₽</td>                        
+                        <td>${item.price.toLocaleString()} ₽</td>
+                        <td>${item.getChildrenStatus()}</td>                        
                         <td>${escapeHtml(extra.prop1)}</td>
                         <td>${escapeHtml(extra.prop2)}</td>
                         <td style="text-align:center">
-                            <button class="delete-btn" data-id="${item.id}" title="Удалить (метод класса)">Удалить</button>
+                            <button class="delete-btn" data-id="${item.id}" title="Удалить">Удалить</button>
                         </td>
                     </tr>`;
   });
