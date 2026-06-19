@@ -316,11 +316,7 @@ function onFormSubmit(event) {
     alert("Выберите класс обуви");
     return;
   }
-  // const brand = brandInput.value.trim();
-  // const size = parseFloat(sizeInput.value);
-  // const color = colorInput.value.trim();
-  // const material = materialInput.value.trim();
-  // const price = parseFloat(priceInput.value);
+
   const forKids = forKidsCheckbox?.checked || false;
 
   let newShoe = null;
@@ -359,20 +355,6 @@ function onFormSubmit(event) {
     return;
   }
 
-  // let newShoe = null;
-  // try {
-  //   const dynamic = getDynamicData(selectedType);
-  //   if (selectedType === 'boots') {
-  //     newShoe = new Boots(brand, size, color, material, price, dynamic.height, dynamic.insulation, forKids);
-  //   } else if (selectedType === 'shoes') {
-  //     newShoe = new Shoes(brand, size, color, material, price, dynamic.toeShape, dynamic.heelHeight, forKids);
-  //   } else if (selectedType === 'sneakers') {
-  //     newShoe = new Sneakers(brand, size, color, material, price, dynamic.waterproof, dynamic.weight, forKids);
-  //   }
-  // } catch (err) {
-  //   alert(err.message);
-  //   return;
-  // }
 
   footwearInventory.push(newShoe);
   updateFullState(footwearInventory);
