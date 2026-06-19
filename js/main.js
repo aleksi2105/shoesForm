@@ -1,7 +1,7 @@
 'use strict'
 
 class Footwear {
-  constructor(brand, size, color, material, price, forKids = false, id = null) {
+  constructor({ brand, size, color, material, price, forKids = false, id = null }) {
     this.brand = brand;
     this.size = size;
     this.color = color;
@@ -36,8 +36,8 @@ class Footwear {
 }
 
 class Boots extends Footwear {
-  constructor(brand, size, color, material, price, height, insulation, forKids = false, id = null) {
-    super(brand, size, color, material, price, forKids, id);
+  constructor({ brand, size, color, material, price, height, insulation, forKids = false, id = null }) {
+    super({ brand, size, color, material, price, forKids, id });
     this.height = height;
     this.insulation = insulation;
   }
@@ -51,13 +51,23 @@ class Boots extends Footwear {
   }
 
   static fromPlainObject(obj) {
-    return new Boots(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.height, obj.insulation, obj.forKids || false, obj.id);
+    return new Boots({
+      brand: obj.brand,
+      size: obj.size,
+      color: obj.color,
+      material: obj.material,
+      price: obj.price,
+      height: obj.height,
+      insulation: obj.insulation,
+      forKids: obj.forKids || false,
+      id: obj.id
+    });
   }
 }
 
 class Shoes extends Footwear {
-  constructor(brand, size, color, material, price, toeShape, heelHeight, forKids = false, id = null) {
-    super(brand, size, color, material, price, forKids, id);
+  constructor({ brand, size, color, material, price, toeShape, heelHeight, forKids = false, id = null }) {
+    super({ brand, size, color, material, price, forKids, id });
     this.toeShape = toeShape;
     this.heelHeight = heelHeight;
   }
@@ -71,13 +81,24 @@ class Shoes extends Footwear {
   }
 
   static fromPlainObject(obj) {
-    return new Shoes(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.toeShape, obj.heelHeight, forKids || false, obj.id);
+    return new Shoes({
+      brand: obj.brand,
+      size: obj.size,
+      color: obj.color,
+      material: obj.material,
+      price: obj.price,
+      toeShape: obj.toeShape,
+      heelHeight: obj.heelHeight,
+      forKids: obj.forKids || false,
+      id: obj.id
+    }
+    );
   }
 }
 
 class Sneakers extends Footwear {
-  constructor(brand, size, color, material, price, waterproof, weight, forKids = false, id = null) {
-    super(brand, size, color, material, price, forKids, id);
+  constructor({ brand, size, color, material, price, waterproof, weight, forKids = false, id = null }) {
+    super({ brand, size, color, material, price, forKids, id });
     this.waterproof = waterproof;
     this.weight = weight;
   }
@@ -91,7 +112,17 @@ class Sneakers extends Footwear {
   }
 
   static fromPlainObject(obj) {
-    return new Sneakers(obj.brand, obj.size, obj.color, obj.material, obj.price, obj.waterproof, obj.weight, forKids || false, obj.id);
+    return new Sneakers({
+      brand: obj.brand,
+      size: obj.size,
+      color: obj.color,
+      material: obj.material,
+      price: obj.price,
+      waterproof: obj.waterproof,
+      weight: obj.weight,
+      forKids: obj.forKids || false,
+      id: obj.id
+    });
   }
 }
 
@@ -285,27 +316,63 @@ function onFormSubmit(event) {
     alert("Выберите класс обуви");
     return;
   }
-  const brand = brandInput.value.trim();
-  const size = parseFloat(sizeInput.value);
-  const color = colorInput.value.trim();
-  const material = materialInput.value.trim();
-  const price = parseFloat(priceInput.value);
+  // const brand = brandInput.value.trim();
+  // const size = parseFloat(sizeInput.value);
+  // const color = colorInput.value.trim();
+  // const material = materialInput.value.trim();
+  // const price = parseFloat(priceInput.value);
   const forKids = forKidsCheckbox?.checked || false;
 
   let newShoe = null;
   try {
     const dynamic = getDynamicData(selectedType);
+    const baseData = {
+      brand: brandInput.value.trim(),
+      size: parseFloat(sizeInput.value),
+      color: colorInput.value.trim(),
+      material: materialInput.value.trim(),
+      price: parseFloat(priceInput.value),
+      forKids: forKids
+    };
+
     if (selectedType === 'boots') {
-      newShoe = new Boots(brand, size, color, material, price, dynamic.height, dynamic.insulation, forKids);
+      newShoe = new Boots({
+        ...baseData,
+        height: dynamic.height,
+        insulation: dynamic.insulation
+      });
     } else if (selectedType === 'shoes') {
-      newShoe = new Shoes(brand, size, color, material, price, dynamic.toeShape, dynamic.heelHeight, forKids);
+      newShoe = new Shoes({
+        ...baseData,
+        toeShape: dynamic.toeShape,
+        heelHeight: dynamic.heelHeight
+      });
     } else if (selectedType === 'sneakers') {
-      newShoe = new Sneakers(brand, size, color, material, price, dynamic.waterproof, dynamic.weight, forKids);
+      newShoe = new Sneakers({
+        ...baseData,
+        waterproof: dynamic.waterproof,
+        weight: dynamic.weight
+      });
     }
   } catch (err) {
     alert(err.message);
     return;
   }
+
+  // let newShoe = null;
+  // try {
+  //   const dynamic = getDynamicData(selectedType);
+  //   if (selectedType === 'boots') {
+  //     newShoe = new Boots(brand, size, color, material, price, dynamic.height, dynamic.insulation, forKids);
+  //   } else if (selectedType === 'shoes') {
+  //     newShoe = new Shoes(brand, size, color, material, price, dynamic.toeShape, dynamic.heelHeight, forKids);
+  //   } else if (selectedType === 'sneakers') {
+  //     newShoe = new Sneakers(brand, size, color, material, price, dynamic.waterproof, dynamic.weight, forKids);
+  //   }
+  // } catch (err) {
+  //   alert(err.message);
+  //   return;
+  // }
 
   footwearInventory.push(newShoe);
   updateFullState(footwearInventory);
